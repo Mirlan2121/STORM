@@ -1,0 +1,4 @@
+## Next Steps
+- [ ] Add file logging
+- [ ] Add middleware
+- [ ] Setup CI/CD
