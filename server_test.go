@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -46,5 +48,20 @@ func TestLogFileCreation(t *testing.T) {
 	// Проверяем, что файл логов создается
 	if _, err := os.Stat("server.log"); os.IsNotExist(err) {
 		t.Error("log file was not created")
+	}
+}
+
+func TestLogging(t *testing.T) {
+	// Перехватываем вывод логов
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer log.SetOutput(os.Stderr)
+
+	req, _ := http.NewRequest("GET", "/", nil)
+	rr := httptest.NewRecorder()
+	handleRequest(rr, req)
+
+	if !strings.Contains(buf.String(), "Request: GET /") {
+		t.Errorf("Log output is wrong: %s", buf.String())
 	}
 }
