@@ -14,3 +14,5 @@
 2025/05/23 11:30:47 [INFO] GET / | Client: [::1]:57145 | Time: 0s
 2025/05/23 11:30:47 Request: GET / | From: [::1]:57146 | Duration: 0s
 2025/05/23 11:30:47 [INFO] GET / | Client: [::1]:57146 | Time: 0s
+2025/05/26 09:27:04 Server started on :8080
+2025/05/26 09:28:14 Request: GET / | From: [::1]:51557 | Duration: 0s

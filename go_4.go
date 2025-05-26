@@ -50,6 +50,15 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// Функция логирование
+func init() {
+	file, err := os.OpenFile("server.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+}
+
 func main() {
 	// Обертываем цепочку middleware с сохранением оригинальной логики
 	handler := SecurityMiddleware(
