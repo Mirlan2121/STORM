@@ -5,3 +5,6 @@
 - [x] Add basic security headers
 - [ ] Add rate limiting
 - [ ] Implement HTTPS
+
+Запрос с другого сервера
+curl http://localhost:8080

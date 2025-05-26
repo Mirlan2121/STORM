@@ -4,70 +4,42 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 	"time"
+
+	"github.com/ulule/limiter/v3"
+	"github.com/ulule/limiter/v3/drivers/middleware/stdlib"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
 )
 
-// Добавляем SecurityMiddleware без изменения существующих функций
-func SecurityMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Базовые security headers
-		w.Header().Set("X-XSS-Protection", "1; mode=block")
-		w.Header().Set("X-Frame-Options", "DENY")
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-
-		next.ServeHTTP(w, r)
-	})
-}
-
-// Оригинальный handleRequest без изменений
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
+	// Разрешаем только GET
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
 
 	response := map[string]string{"status": "I AM THE STORM"}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
-
-	log.Printf(
-		"Request: %s %s | From: %s | Duration: %v",
-		r.Method,
-		r.URL.Path,
-		r.RemoteAddr,
-		time.Since(start),
-	)
-
-	file, _ := os.OpenFile("server.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	defer file.Close()
-	log.SetOutput(file)
-}
-
-// Оригинальный LoggingMiddleware без изменений
-func LoggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		next.ServeHTTP(w, r)
-		log.Printf("Request: %s %s | Duration: %v", r.Method, r.URL.Path, time.Since(start))
-	})
-}
-
-// Функция логирование
-func init() {
-	file, err := os.OpenFile("server.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
 }
 
 func main() {
-	// Обертываем цепочку middleware с сохранением оригинальной логики
-	handler := SecurityMiddleware(
-		LoggingMiddleware(
-			http.HandlerFunc(handleRequest),
-		),
-	)
+	// Настройка лимитера: 100 запросов в минуту
+	rate := limiter.Rate{
+		Period: 1 * time.Minute,
+		Limit:  100,
+	}
+	store := memory.NewStore()
+	middleware := stdlib.NewMiddleware(limiter.New(store, rate))
 
-	http.Handle("/", handler)
+	http.Handle("/", middleware.Handler(http.HandlerFunc(handleRequest)))
 	log.Println("Server started on :8080")
 	http.ListenAndServe(":8080", nil)
+
+	// Запуск HTTPS
+	log.Println("Starting HTTPS server on :443")
+	err := http.ListenAndServeTLS(":443", "cert.pem", "key.pem", nil)
+	if err != nil {
+		log.Fatal("HTTPS failed: ", err)
+	}
 }
