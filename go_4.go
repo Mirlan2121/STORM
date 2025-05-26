@@ -34,7 +34,9 @@ func main() {
 
 	http.Handle("/", middleware.Handler(http.HandlerFunc(handleRequest)))
 	log.Println("Server started on :8080")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServeTLS(":443", "tls/cert.pem", "tls/key.pem", nil)
+	// Меняем порт на 8443 (не требует прав root)
+	http.ListenAndServeTLS(":8443", "tls/cert.pem", "tls/key.pem", nil)
 
 	// Запуск HTTPS
 	log.Println("Starting HTTPS server on :443")
