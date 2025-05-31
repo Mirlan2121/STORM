@@ -1,0 +1,18 @@
+2025/05/23 11:30:29 Request: GET / | From: [::1]:57137 | Duration: 0s
+2025/05/23 11:30:29 [INFO] GET / | Client: [::1]:57137 | Time: 0s
+2025/05/23 11:30:30 Request: GET / | From: [::1]:57138 | Duration: 0s
+2025/05/23 11:30:30 [INFO] GET / | Client: [::1]:57138 | Time: 0s
+2025/05/23 11:30:31 Request: GET / | From: [::1]:57139 | Duration: 0s
+2025/05/23 11:30:31 [INFO] GET / | Client: [::1]:57139 | Time: 0s
+2025/05/23 11:30:45 Request: GET / | From: [::1]:57142 | Duration: 0s
+2025/05/23 11:30:45 [INFO] GET / | Client: [::1]:57142 | Time: 0s
+2025/05/23 11:30:46 Request: GET / | From: [::1]:57143 | Duration: 0s
+2025/05/23 11:30:46 [INFO] GET / | Client: [::1]:57143 | Time: 0s
+2025/05/23 11:30:46 Request: GET / | From: [::1]:57144 | Duration: 0s
+2025/05/23 11:30:46 [INFO] GET / | Client: [::1]:57144 | Time: 1.1006ms
+2025/05/23 11:30:47 Request: GET / | From: [::1]:57145 | Duration: 0s
+2025/05/23 11:30:47 [INFO] GET / | Client: [::1]:57145 | Time: 0s
+2025/05/23 11:30:47 Request: GET / | From: [::1]:57146 | Duration: 0s
+2025/05/23 11:30:47 [INFO] GET / | Client: [::1]:57146 | Time: 0s
+2025/05/26 09:27:04 Server started on :8080
+2025/05/26 09:28:14 Request: GET / | From: [::1]:51557 | Duration: 0s
